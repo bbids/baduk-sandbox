@@ -6,6 +6,7 @@ from utility import reset
 
 
 class SideMenu(ttk.Frame):
+    """Represents the app's side menu. Includes all the buttons"""
 
     def __init__(self, master):
         self.master = master
