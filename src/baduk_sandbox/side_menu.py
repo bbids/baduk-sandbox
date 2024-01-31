@@ -1,12 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
 
-from src.utility import save
-from src.utility import reset
-from src.utility import load
-from src.utility import undo
-from src.utility import black
-from src.utility import white
+from .utility import save
+from .utility import reset
+from .utility import load
+from .utility import undo
+from .utility import black
+from .utility import white
 
 
 class SideMenu(ttk.Frame):
