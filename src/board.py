@@ -22,7 +22,6 @@ class Board(Canvas):
         # wood color
         self.background = "#DBB072"
 
-
         # canvas width and height, later accessible via tkinter
         width = self.line_size + 2 * self.offset
         height = self.line_size + 2 * self.offset
@@ -36,10 +35,20 @@ class Board(Canvas):
 
         self.draw_horizontal_lines()
         self.draw_vertical_lines()
+        self.draw_star_points()
 
         # event listener for stones
         self.bind("<1>", lambda event: self.on_board_click(event, "black"))
         self.bind("<3>", lambda event: self.on_board_click(event, "white"))
+
+    def draw_star_points(self):
+        for row in [3, 9, 15]:
+            for col in [3, 9, 15]: 
+                x = row * self.square_size + self.offset
+                y = col * self.square_size + self.offset
+                radius = self.square_size // 7
+
+                self.create_oval(x- radius, y - radius, x + radius, y + radius, fill="black")
 
     def draw_horizontal_lines(self):
         for i in range(0, self.line_size + 1, self.square_size):
