@@ -1,5 +1,3 @@
-from tkinter import *
-
 import logging
 
 from app import App

@@ -1,4 +1,4 @@
-from tkinter import *
+import tkinter as tk
 from tkinter import ttk
 
 from utility import save
@@ -12,10 +12,10 @@ class SideMenu(ttk.Frame):
         self.master = master
 
         super().__init__(master, width=200, height=400, padding=(20, 100))
-        self.grid(column=1, row=0, sticky=(W, E))
-        
+        self.grid(column=1, row=0, sticky=(tk.W, tk.E))
+
         save_btn = ttk.Button(self, text="Save", command=save)
-        save_btn.grid(column=0, row=0, sticky=W, padx=(10, 10))
+        save_btn.grid(column=0, row=0, sticky=tk.W, padx=(10, 10))
 
         reset_btn = ttk.Button(self, text="Reset", command=reset)
-        reset_btn.grid(column=1, row=0, sticky=E, padx=(10, 10))
+        reset_btn.grid(column=1, row=0, sticky=tk.E, padx=(10, 10))
