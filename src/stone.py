@@ -11,23 +11,24 @@ class Stone(Canvas):
 
         match color:
             case "black":
-                image = Image.open("black.png")
+                image = Image.open("assets/black.png")
             case "white":
-                image = Image.open("white.png")
+                image = Image.open("assets/white.png")
 
-        image = image.resize((27, 27))
+        image = image.resize((size, size))
 
         self.tk_image = ImageTk.PhotoImage(image)
 
         super().__init__(
-            master, width=size - 1, height=size - 1, borderwidth=0, highlightthickness=0
+            master, width=size, height=size, borderwidth=0, highlightthickness=0
         )
 
         self.color = color
-        self.configure(background="#DBB072")
+        # the background is transparent by default, which is white in tkinter
+        self.configure(background=master.background)
 
         # save col and row for easier manipulation on the board
         self.col = (event.x - size // 2) // size + 1
         self.row = (event.y - size // 2) // size + 1
         self.place(x=self.col * size, y=self.row * size, anchor="center")
-        self.create_image(13, 13, image=self.tk_image, anchor="center", tags="stone")
+        self.create_image(0, 0, image=self.tk_image, anchor="nw")

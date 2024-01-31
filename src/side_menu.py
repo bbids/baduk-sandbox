@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 
-from utility import save
-from utility import reset
+from src.utility import save
+from src.utility import reset
 
 
 class SideMenu(ttk.Frame):

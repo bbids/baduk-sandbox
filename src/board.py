@@ -1,7 +1,7 @@
 from tkinter import Canvas
 import logging
 
-from stone import Stone
+from src.stone import Stone
 
 
 class Board(Canvas):
@@ -19,6 +19,9 @@ class Board(Canvas):
         self.square_size = self.line_size // (board_size - 1)
         # offset for aesthetics, because stones can get placed on the edge
         self.offset = self.square_size
+        # wood color
+        self.background = "#DBB072"
+
 
         # canvas width and height, later accessible via tkinter
         width = self.line_size + 2 * self.offset
@@ -29,7 +32,7 @@ class Board(Canvas):
             master, width=width, height=height, borderwidth=0, highlightthickness=0
         )
         self.grid(column=0, row=0, padx=50, pady=50)
-        self.configure(background="#DBB072")
+        self.configure(background=self.background)
 
         self.draw_horizontal_lines()
         self.draw_vertical_lines()

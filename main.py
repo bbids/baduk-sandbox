@@ -1,9 +1,9 @@
 import logging
 
-from app import App
-from mainframe import Mainframe
-from board import Board
-from side_menu import SideMenu
+from src.app import App
+from src.mainframe import Mainframe
+from src.board import Board
+from src.side_menu import SideMenu
 
 
 logging.basicConfig(level=logging.DEBUG)
