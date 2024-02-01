@@ -4,7 +4,8 @@ from tkinter import ttk
 from .utility import save
 from .utility import reset
 from .utility import load
-from .utility import undo
+
+# from .utility import undo
 from .utility import black
 from .utility import white
 
@@ -30,7 +31,9 @@ class SideMenu(ttk.Frame):
         white_btn = ttk.Button(self, text="White", command=white)
         white_btn.grid(column=1, row=1, sticky=tk.E, padx=(10, 10), pady=50)
 
-        undo_btn = ttk.Button(self, text="Undo", command=undo)
+        undo_btn = ttk.Button(
+            self, text="Undo", command=self.master.master.undo_command
+        )
         undo_btn.grid(column=0, row=2, sticky=tk.W, padx=(10, 10), pady=50)
 
         reset_btn = ttk.Button(self, text="Reset", command=reset)
