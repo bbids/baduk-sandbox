@@ -18,8 +18,8 @@ class PlaceStone(Command):
         self.board.map[self.row - 1][self.col - 1].destroy()
         self.board.map[self.row - 1][self.col - 1] = None
 
-    def execute(self, event):
-        state = self.board.place_stone(event)
+    def execute(self, event, stone_color):
+        state = self.board.place_stone(event, stone_color)
 
         # is stone placed?
         if state is not None:
