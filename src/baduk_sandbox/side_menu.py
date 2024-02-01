@@ -5,36 +5,39 @@ from .utility import save
 from .utility import reset
 from .utility import load
 
-# from .utility import undo
-from .utility import black
-from .utility import white
+from .ui_command import BlackCommand
+from .ui_command import WhiteCommand
 
 
 class SideMenu(ttk.Frame):
-    """Represents the app's side menu. Includes all the buttons"""
+    """Represents the app's side menu, acts as an UI commands invoker and client"""
 
     def __init__(self, master):
         self.master = master
+        self.app = master.master
 
         super().__init__(master, width=200, height=400, padding=(20, 100))
         self.grid(column=1, row=0, sticky=(tk.W, tk.E))
 
-        save_btn = ttk.Button(self, text="Save", command=save)
-        save_btn.grid(column=0, row=0, sticky=tk.W, padx=(10, 10), pady=50)
-
-        load_btn = ttk.Button(self, text="Load", command=load)
-        load_btn.grid(column=1, row=0, sticky=tk.E, padx=(10, 10), pady=50)
-
-        black_btn = ttk.Button(self, text="Black", command=black)
-        black_btn.grid(column=0, row=1, sticky=tk.W, padx=(10, 10), pady=50)
-
-        white_btn = ttk.Button(self, text="White", command=white)
-        white_btn.grid(column=1, row=1, sticky=tk.E, padx=(10, 10), pady=50)
-
-        undo_btn = ttk.Button(
-            self, text="Undo", command=self.master.master.undo_command
+        self.create_button("Save", save, column=0, row=0, sticky=tk.W)
+        self.create_button("Load", load, column=1, row=0, sticky=tk.E)
+        self.create_button(
+            "Black",
+            BlackCommand(self.app).execute,
+            column=0,
+            row=1,
+            sticky=tk.W,
         )
-        undo_btn.grid(column=0, row=2, sticky=tk.W, padx=(10, 10), pady=50)
+        self.create_button(
+            "White",
+            WhiteCommand(self.app).execute,
+            column=1,
+            row=1,
+            sticky=tk.E,
+        )
+        self.create_button("Undo", self.app.undo_command, column=0, row=2, sticky=tk.W)
+        self.create_button("Reset", reset, column=1, row=2, sticky=tk.E)
 
-        reset_btn = ttk.Button(self, text="Reset", command=reset)
-        reset_btn.grid(column=1, row=2, sticky=tk.E, padx=(10, 10), pady=50)
+    def create_button(self, text, command, column, row, sticky):
+        button = ttk.Button(self, text=text, command=command)
+        button.grid(column=column, row=row, sticky=sticky, padx=(10, 10), pady=50)

@@ -4,13 +4,13 @@ import logging
 from .mainframe import Mainframe
 from .board import Board
 from .side_menu import SideMenu
-from .command import PlaceStone
+from .action_command import PlaceStone
 from .command_history import CommandHistory
 from .stone_placement import StonePlacement
 
 
 class App(tk.Tk):
-    """Manage the UI components, act as an invoker and the client."""
+    """Manage the UI components, act as an action command invoker and client."""
 
     def __init__(self):
         super().__init__()
@@ -21,26 +21,25 @@ class App(tk.Tk):
 
         # UI components
         self.mainframe = Mainframe(self)
-        self.side_menu = SideMenu(self.mainframe)
         self.board = Board(self.mainframe)
+        self.side_menu = SideMenu(self.mainframe)
 
         self.stone_colorer = StonePlacement(alternate=True, initial_color="black")
         self.history = CommandHistory()
 
         self.board.bind(
-            "<1>", lambda event: self.execute_command(PlaceStone(self.board), event)
+            "<1>", lambda event: self.execute_command(PlaceStone(self), event)
         )
 
-    def execute_command(self, command, event):
-        if command.execute(event, self.stone_colorer.color):
+    def execute_command(self, command, event = None):
+            command.execute(event)
             self.history.push(command)
             self.stone_colorer.toggle_color()
-
-        logging.info(f"Command history: {self.history}")
 
     def undo_command(self):
         assert self.history.size() > 0
         self.history.pop().undo()
+        self.stone_colorer.toggle_color()
 
 
 def start_app() -> App:
