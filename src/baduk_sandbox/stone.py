@@ -75,4 +75,3 @@ class Stone(Canvas):
 
     def __repr__(self):
         return f"{self.color}"
-

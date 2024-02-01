@@ -1,15 +1,11 @@
 from abc import ABC, abstractmethod
 
-import logging
-
 class ActionCommand(ABC):
     """Command interface"""
 
     def __init__(self, app):
         self.app = app
         self.board = app.board
-
-        logging.debug(f"app created {type(self.app)}")
 
     @abstractmethod
     def execute(self):
@@ -20,6 +16,7 @@ class PlaceStone(ActionCommand):
     """Board command for placing the stone"""
 
     def undo(self):
+        assert hasattr(self, "row") and hasattr(self, "col")
         self.board.map[self.row - 1][self.col - 1].destroy()
         self.board.map[self.row - 1][self.col - 1] = None
 
