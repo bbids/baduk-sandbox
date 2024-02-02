@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 class UICommand(ABC):
     """Command interface"""
 
@@ -17,7 +18,8 @@ class BlackCommand(UICommand):
     def execute(self):
         self.app.stone_colorer.alternate = False
         self.app.stone_colorer.color = "black"
-    
+
+
 class WhiteCommand(UICommand):
     """Side-menu command for switching stone placement colorer to mode white"""
 
@@ -25,8 +27,18 @@ class WhiteCommand(UICommand):
         self.app.stone_colorer.alternate = False
         self.app.stone_colorer.color = "white"
 
+
+class AlternateCommand(UICommand):
+    """Side-menu button command for switching to alternate color mode for colorer"""
+
+    def execute(self):
+        self.app.stone_colorer.alternate = True
+        self.app.stone_colorer.color = "black"
+
+
 class ResetCommand(UICommand):
     """Clean up the board(, and command history)"""
+
     # TODO auto save the board, for restoring
 
     def execute(self):
@@ -35,6 +47,7 @@ class ResetCommand(UICommand):
                 if self.app.board.map[r][c] is not None:
                     self.app.board.map[r][c].destroy()
                     self.app.board.map[r][c] = None
+        
+        # app history stores only active commands!
         self.app.history.reset()
-        self.app.stone_colorer.alternate = True
-        self.app.stone_colorer.color = "black"
+        AlternateCommand(self.app).execute()
