@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+from .event import EventWrapper
+
 
 class ActionCommand(ABC):
     """Command interface"""
@@ -17,13 +19,13 @@ class PlaceStone(ActionCommand):
 
     def __init__(self, app, event):
         super().__init__(app)
-        self._event = event
+        self._event_w = EventWrapper(event)
 
     def undo(self):
-        self._app.board.remove_stone(self._event.x, self._event.y)
+        self._app.board.remove_stone(self._event_w)
 
     def execute(self):
-        success = self._app.board.place_stone(self._event)
+        success = self._app.board.place_stone(self._event_w)
         if success:
             self._app.history.push(self)
 

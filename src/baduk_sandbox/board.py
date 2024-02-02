@@ -3,7 +3,8 @@ import logging
 
 from .stone import Stone
 from .board_GUI import BoardGUI
-from .action_command import PlaceStone, RemoveStone
+from .action_command import PlaceStone
+from .event import EventWrapper
 
 
 class Board(Canvas):
@@ -50,27 +51,38 @@ class Board(Canvas):
 
         return x_cond and y_cond
 
-    def place_stone(self, event):
+    def place_stone(self, event_w):
         """Handle the stone placement event. 
         
         Returns bool value depending if stone was successfuly placed
         """
-        logging.debug(f"Board clicked at x={event.x}, y={event.y}")
+        x = event_w.event.x
+        y = event_w.event.y
+        logging.debug(f"Board clicked at x={x}, y={y}")
+
 
         stone_color = self.master.play_mode.color
 
-        if self.is_valid_spot(event.x, event.y):
-            stone = Stone(self, event, stone_color)
+        if self.is_valid_spot(x, y):
+            stone = Stone(self, event_w, stone_color)
 
             self.map[stone.row - 1][stone.col - 1] = stone
             self.master.placement_sound.play()
             self.master.play_mode.toggle_color()
 
+            event_w.row = stone.row
+            event_w.col = stone.col
+
             return True
         
         return False
     
-    def remove_stone(self, x, y):
+    def remove_stone(self, event_w):
+        self.map[event_w.row - 1][event_w.col - 1].destroy()
+        self.map[event_w.row - 1][event_w.col - 1] = None
+        return True
+    
+    def remove_stone_old(self, x, y):
         """Remove stone based on x and y relative to board"""
         new_x, new_y = Stone.compute_place(self, x, y)
         row, col = Stone.compute_col_and_row(self, new_x, new_y)

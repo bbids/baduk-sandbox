@@ -1,10 +1,9 @@
-from tkinter import Canvas, Event
+from tkinter import Canvas
 from PIL import ImageTk
 from PIL import Image
 
 
 import logging
-from .action_command import RemoveStone
 
 
 class Stone(Canvas):
@@ -12,7 +11,7 @@ class Stone(Canvas):
 
     image_cache = {}
 
-    def __init__(self, master, event, color):
+    def __init__(self, master, event_w, color):
         self.master = master
         self.color = color
 
@@ -29,7 +28,7 @@ class Stone(Canvas):
         )
 
         # place and show image
-        new_x, new_y, self.row, self.col = self.get_placement(event.x, event.y)
+        new_x, new_y, self.row, self.col = self.get_placement(event_w.event.x, event_w.event.y)
         self.place(x=new_x, y=new_y, anchor="center")
         self.create_image(0, 0, image=self.tk_image, anchor="nw")
 
