@@ -7,6 +7,7 @@ from .utility import load
 
 from .ui_command import BlackCommand
 from .ui_command import WhiteCommand
+from .ui_command import ResetCommand
 
 
 class SideMenu(ttk.Frame):
@@ -36,7 +37,9 @@ class SideMenu(ttk.Frame):
             sticky=tk.E,
         )
         self.create_button("Undo", self.app.undo_command, column=0, row=2, sticky=tk.W)
-        self.create_button("Reset", reset, column=1, row=2, sticky=tk.E)
+        self.create_button(
+            "Reset", ResetCommand(self.app).execute, column=1, row=2, sticky=tk.E
+        )
 
     def create_button(self, text, command, column, row, sticky):
         button = ttk.Button(self, text=text, command=command)

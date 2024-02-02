@@ -13,6 +13,9 @@ class CommandHistory:
     def size(self):
         return len(self.history)
     
+    def reset(self):
+        self._history = []
+    
     @property
     def history(self):
         return self._history
