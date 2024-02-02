@@ -1,12 +1,15 @@
-from tkinter import Canvas
+from tkinter import Canvas, Event
 from PIL import ImageTk
 from PIL import Image
 
+
 import logging
+from .action_command import RemoveStone
 
 
 class Stone(Canvas):
     """Represents the stone on the board."""
+
     image_cache = {}
 
     def __init__(self, master, event, color):
@@ -18,41 +21,48 @@ class Stone(Canvas):
         self.tk_image = Stone.image_cache[color]
 
         super().__init__(
-            master, 
-            width=self.master.square_size, 
-            height=self.master.square_size, 
-            borderwidth=0, 
-            highlightthickness=0
+            master,
+            width=self.master.square_size,
+            height=self.master.square_size,
+            borderwidth=0,
+            highlightthickness=0,
         )
 
         # place and show image
-        new_x, new_y, self.col, self.row = self.compute_placement(event.x, event.y)
+        new_x, new_y, self.row, self.col = self.get_placement(event.x, event.y)
         self.place(x=new_x, y=new_y, anchor="center")
         self.create_image(0, 0, image=self.tk_image, anchor="nw")
 
         # hide the default white background
         self.configure(background=master.gui.background)
 
-    def compute_placement(self, x, y):
-        """Find the spot on the board on which to place the stone.
-        
+    @staticmethod
+    def compute_place(board, x, y):
+        """Based on received x and y relative to board canvas x and y,
+        compute the suitable x"""
+        size = board.square_size
+        offset = board.offset
+
+        new_x = ((x - offset + size // 2) // size) * size + offset
+        new_y = ((y - offset + size // 2) // size) * size + offset
+
+        return new_x, new_y
+
+    @staticmethod
+    def compute_col_and_row(board, x, y):
+        return x // board.square_size, y // board.square_size
+
+    def get_placement(self, x, y):
+        """Handle stone placement based on event x and y relative to board canvas
+
         Returns: x, y, row, col
         """
-        master = self.master
-        size = master.square_size
+        new_x, new_y = Stone.compute_place(self.master, x, y)
 
-        new_x = ((x - master.offset + size // 2) // size) * size + master.offset
-        new_y = ((y - master.offset + size // 2) // size) * size + master.offset
+        row, col = Stone.compute_col_and_row(self.master, new_x, new_y)
 
-        # we also save row and col for a map of all the stones and convenience
-        row = new_y // size
-        col = new_x // size
-
-        logging.debug(f"Row: {row}")
-        logging.debug(f"Col: {col}")
-
+        logging.debug(f"Row: {row} Col: {col}")
         return (new_x, new_y, row, col)
-
 
     def load_stone_image(self, color):
         match color:
@@ -65,13 +75,12 @@ class Stone(Canvas):
         size = self.master.square_size
         image = image.resize((size, size))
         return ImageTk.PhotoImage(image)
-    
+
         """
         alpha = image.split()[3]
         alpha = alpha.point(lambda i: i * 0.5)
         image.putalpha(alpha)
         """
-
 
     def __repr__(self):
         return f"{self.color}"

@@ -2,49 +2,43 @@ import tkinter as tk
 import logging
 import tkSnack
 
-from .mainframe import Mainframe
 from .board import Board
 from .side_menu import SideMenu
 from .action_command import PlaceStone
 from .command_history import CommandHistory
-from .stone_placement import StonePlacement
+from .play_mode import PlayMode
 
 
 class App(tk.Tk):
-    """Manage the UI components, act as an action command invoker and client."""
+    """Manage the UI components"""
 
     def __init__(self):
         super().__init__()
-
         self.title("Baduk-sandbox")
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
 
+        # Sound management
         tkSnack.initializeSnack(self)
         self.placement_sound = tkSnack.Sound()
         self.placement_sound.read("assets/stone_placement.wav")
 
         # UI components
-        self.mainframe = Mainframe(self)
-        self.board = Board(self.mainframe)
-        self.side_menu = SideMenu(self.mainframe)
+        self.board = Board(self)
+        self.side_menu = SideMenu(self)
 
-        self.stone_colorer = StonePlacement(alternate=True, initial_color="black")
+        self.play_mode = PlayMode()
+        self.play_mode.game_start()
         self.history = CommandHistory()
-
-        self.board.bind(
-            "<1>", lambda event: self.execute_command(PlaceStone(self), event)
-        )
-
-    def execute_command(self, command, event = None):
-            command.execute(event)
-            self.history.push(command)
-            self.stone_colorer.toggle_color()
 
     def undo_command(self):
         assert self.history.size() > 0
-        self.history.pop().undo()
-        self.stone_colorer.toggle_color()
+        cmnd = self.history.pop()
+
+        if isinstance(cmnd, PlaceStone):
+            self.play_mode.toggle_color
+            cmnd.undo()
+        
 
 
 def start_app() -> App:

@@ -1,11 +1,27 @@
 
 
-class StonePlacement:
-    """Represents the stone placmenet/color"""
+class PlayMode:
+    """Represents the configuration options for the game"""
 
     def __init__(self, alternate = True, initial_color = "black"):
         self.alternate = alternate
         self.color = initial_color
+
+    def game_start(self):
+        self.alternate = True
+        self.color = "black"
+
+    def black_only(self):
+        self.alternate = False
+        self.color = "black"
+
+    def white_only(self):
+        self.alternate = False
+        self.color = "white"
+
+    def alternate_stones(self):
+        self.alternate = True
+
 
     def toggle_color(self):
         """Switch color if alternate is true"""

@@ -5,10 +5,6 @@ def save():
     logging.debug("save...")
 
 
-def reset():
-    logging.debug("reset...")
-
-
 def load():
     logging.debug("load ...")
 

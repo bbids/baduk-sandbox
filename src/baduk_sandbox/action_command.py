@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
 
+
 class ActionCommand(ABC):
     """Command interface"""
 
     def __init__(self, app):
-        self.app = app
-        self.board = app.board
+        self._app = app
 
     @abstractmethod
     def execute(self):
@@ -15,19 +15,34 @@ class ActionCommand(ABC):
 class PlaceStone(ActionCommand):
     """Board command for placing the stone"""
 
+    def __init__(self, app, event):
+        super().__init__(app)
+        self._event = event
+
     def undo(self):
-        assert hasattr(self, "row") and hasattr(self, "col")
-        self.board.map[self.row - 1][self.col - 1].destroy()
-        self.board.map[self.row - 1][self.col - 1] = None
+        self._app.board.remove_stone(self._event.x, self._event.y)
 
-    def execute(self, event):
-        stone_color = self.app.stone_colorer.color
-        state = self.board.place_stone(event, stone_color)
+    def execute(self):
+        success = self._app.board.place_stone(self._event)
+        if success:
+            self._app.history.push(self)
 
-        # self.board.play_sound()
-        self.app.placement_sound.play()
+'''
+class RemoveStone(ActionCommand):
+    """Remove the stones that have no liberties"""
 
-        # is stone placed?
-        if state is not None:
-            # save row and column for undo
-            self.row, self.col = state
+    def __init__(self, app, event):
+        super().__init__(app)
+        self._event = event
+
+    def undo(self):
+        # PlaceStone(self._app, self._event).execute()
+
+    def execute(self):
+        print("X: ", self._event.x, "Y: ", self._event.y)
+        """
+        success = self._app.board.remove_stone(self._event.x, self._event.y)
+        if success:
+            self._app.history.push(self)
+        """
+'''

@@ -15,7 +15,6 @@ class SideMenu(ttk.Frame):
 
     def __init__(self, master):
         self.master = master
-        self.app = master.master
 
         super().__init__(master, width=200, height=400, padding=(20, 100))
         self.grid(column=1, row=0, sticky=(tk.W, tk.E))
@@ -24,6 +23,7 @@ class SideMenu(ttk.Frame):
         active_style = ttk.Style()
         active_style.configure("Active.TButton", borderwidth="2", font=("calibri", 10, "bold"))
         self.active_button = None
+
         # stylize the default ttk Button
         default_style = ttk.Style()
         default_style.configure("TButton", focuscolor="none")
@@ -33,21 +33,21 @@ class SideMenu(ttk.Frame):
 
         self.create_button(
             "Black",
-            BlackCommand(self.app).execute,
+            BlackCommand(self.master).execute,
             column=0,
             row=1,
             sticky=tk.W,
         )
         self.create_button(
             "White",
-            WhiteCommand(self.app).execute,
+            WhiteCommand(self.master).execute,
             column=1,
             row=1,
             sticky=None,
         )
         self.alternate_btn = self.create_button(
             "Alternate",
-            AlternateCommand(self.app).execute,
+            AlternateCommand(self.master).execute,
             column=2,
             row=1,
             sticky=tk.E
@@ -55,9 +55,9 @@ class SideMenu(ttk.Frame):
         self.alternate_btn["style"] = "Active.TButton"
         self.active_button = self.alternate_btn
 
-        self.create_button("Undo", self.app.undo_command, column=0, row=2, sticky=tk.W)
+        self.create_button("Undo", self.master.undo_command, column=0, row=2, sticky=tk.W)
         self.create_button(
-            "Reset", ResetCommand(self.app).execute, column=1, row=2, sticky=tk.E
+            "Reset", ResetCommand(self.master).execute, column=1, row=2, sticky=tk.E
         )
 
     def create_button(self, text, command, column, row, sticky):
@@ -70,7 +70,6 @@ class SideMenu(ttk.Frame):
             command()
 
         button = ttk.Button(self, text=text, command=button_click_handler)
-        # button["style"] = "Active.TButton"
         button.grid(column=column, row=row, sticky=sticky, padx=(10, 10), pady=50)
 
         return button

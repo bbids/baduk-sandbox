@@ -3,6 +3,7 @@ import logging
 
 from .stone import Stone
 from .board_GUI import BoardGUI
+from .action_command import PlaceStone, RemoveStone
 
 
 class Board(Canvas):
@@ -34,25 +35,57 @@ class Board(Canvas):
         # handle the gui in a seperate space
         self.gui = BoardGUI(self, background)
 
-    def place_stone(self, event, stone_color="black"):
-        """Handle the stone placement event. 
-        
-        Returns stone column and row if valid, else None.
-        """
-        logging.debug(f"Board clicked at x={event.x}, y={event.y}")
+        # handle stone placement
+        self.bind(
+            "<1>", lambda event: PlaceStone(self.master, event).execute()
+        )
 
+    def is_valid_spot(self, x, y):
+        """Get x and y relative to board canvas, and check if a stone can be placed here."""
         se = self.square_size
         off = self.offset
 
-        # ignore offset
-        x_cond = (off - se / 2) < event.x < (self.line_size + off + se / 2)
-        y_cond = (off - se / 2) < event.y < (self.line_size + off + se / 2)
-        if x_cond and y_cond:
+        x_cond = (off - se / 2) < x < (self.line_size + off + se / 2)
+        y_cond = (off - se / 2) < y < (self.line_size + off + se / 2)
+
+        return x_cond and y_cond
+
+    def place_stone(self, event):
+        """Handle the stone placement event. 
+        
+        Returns bool value depending if stone was successfuly placed
+        """
+        logging.debug(f"Board clicked at x={event.x}, y={event.y}")
+
+        stone_color = self.master.play_mode.color
+
+        if self.is_valid_spot(event.x, event.y):
             stone = Stone(self, event, stone_color)
+
             self.map[stone.row - 1][stone.col - 1] = stone
-            # test the map
-            # logging.debug(f"Row in board: {stone.row - 1}")
-            # logging.debug(f"Col in board: {stone.col - 1}")
-            # logging.debug(self.map[stone.row - 1][stone.col - 1])
-            return stone.row, stone.col
-        return None
+            self.master.placement_sound.play()
+            self.master.play_mode.toggle_color()
+
+            return True
+        
+        return False
+    
+    def remove_stone(self, x, y):
+        """Remove stone based on x and y relative to board"""
+        new_x, new_y = Stone.compute_place(self, x, y)
+        row, col = Stone.compute_col_and_row(self, new_x, new_y)
+        
+        self.map[row - 1][col - 1].destroy()
+        self.map[row - 1][col - 1] = None
+
+        return True
+
+
+    def clear(self):
+        """Clear the board"""
+        for r in range(len(self.map)):
+            for c in range(len(self.map[r])):
+                if self.map[r][c] is not None:
+                    self.map[r][c].destroy()
+                    self.map[r][c] = None
+    
