@@ -33,7 +33,6 @@ class AlternateCommand(UICommand):
 
     def execute(self):
         self.app.stone_colorer.alternate = True
-        self.app.stone_colorer.color = "black"
 
 
 class ResetCommand(UICommand):
