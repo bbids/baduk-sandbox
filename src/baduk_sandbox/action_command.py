@@ -24,6 +24,9 @@ class PlaceStone(ActionCommand):
         stone_color = self.app.stone_colorer.color
         state = self.board.place_stone(event, stone_color)
 
+        # self.board.play_sound()
+        self.app.placement_sound.play()
+
         # is stone placed?
         if state is not None:
             # save row and column for undo

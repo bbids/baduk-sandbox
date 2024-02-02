@@ -1,5 +1,6 @@
 import tkinter as tk
 import logging
+import tkSnack
 
 from .mainframe import Mainframe
 from .board import Board
@@ -18,6 +19,10 @@ class App(tk.Tk):
         self.title("Baduk-sandbox")
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
+
+        tkSnack.initializeSnack(self)
+        self.placement_sound = tkSnack.Sound()
+        self.placement_sound.read("assets/stone_placement.wav")
 
         # UI components
         self.mainframe = Mainframe(self)
