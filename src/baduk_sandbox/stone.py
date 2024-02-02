@@ -35,7 +35,7 @@ class Stone(Canvas):
         # hide the default white background
         self.configure(background=master.gui.background)
 
-    def compute_place(self, x, y):
+    def compute_x_and_y(self, x, y):
         """Based on received x and y relative to board canvas x and y,
         compute the suitable x"""
         board = self.master
@@ -56,7 +56,7 @@ class Stone(Canvas):
 
         Returns: x, y, row, col
         """
-        new_x, new_y = self.compute_place(x, y)
+        new_x, new_y = self.compute_x_and_y(x, y)
 
         row, col = self.compute_col_and_row(new_x, new_y)
 
