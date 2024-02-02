@@ -4,7 +4,6 @@ import logging
 from .stone import Stone
 from .board_GUI import BoardGUI
 from .action_command import PlaceStone
-from .event import EventWrapper
 
 
 class Board(Canvas):
@@ -80,16 +79,6 @@ class Board(Canvas):
     def remove_stone(self, event_w):
         self.map[event_w.row - 1][event_w.col - 1].destroy()
         self.map[event_w.row - 1][event_w.col - 1] = None
-        return True
-    
-    def remove_stone_old(self, x, y):
-        """Remove stone based on x and y relative to board"""
-        new_x, new_y = Stone.compute_place(self, x, y)
-        row, col = Stone.compute_col_and_row(self, new_x, new_y)
-        
-        self.map[row - 1][col - 1].destroy()
-        self.map[row - 1][col - 1] = None
-
         return True
 
 

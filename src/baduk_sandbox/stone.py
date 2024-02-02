@@ -35,10 +35,10 @@ class Stone(Canvas):
         # hide the default white background
         self.configure(background=master.gui.background)
 
-    @staticmethod
-    def compute_place(board, x, y):
+    def compute_place(self, x, y):
         """Based on received x and y relative to board canvas x and y,
         compute the suitable x"""
+        board = self.master
         size = board.square_size
         offset = board.offset
 
@@ -47,8 +47,8 @@ class Stone(Canvas):
 
         return new_x, new_y
 
-    @staticmethod
-    def compute_col_and_row(board, x, y):
+    def compute_col_and_row(self, x, y):
+        board = self.master
         return x // board.square_size, y // board.square_size
 
     def get_placement(self, x, y):
@@ -56,9 +56,9 @@ class Stone(Canvas):
 
         Returns: x, y, row, col
         """
-        new_x, new_y = Stone.compute_place(self.master, x, y)
+        new_x, new_y = self.compute_place(x, y)
 
-        row, col = Stone.compute_col_and_row(self.master, new_x, new_y)
+        row, col = self.compute_col_and_row(new_x, new_y)
 
         logging.debug(f"Row: {row} Col: {col}")
         return (new_x, new_y, row, col)
