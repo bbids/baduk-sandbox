@@ -11,13 +11,10 @@ from .event import EventWrapper
 class Board(Canvas):
     """Represents the game board"""
 
-    def __init__(self, master, board_size=19, background="#DBB072"):
+    def __init__(self, master, line_size = 504, board_size=19, background="#DBB072"):
         self.master = master
+        self._line_size = line_size
         self._board_size = board_size
-        self._board_map = [
-            [None for _ in range(self.board_size)] for _ in range(self.board_size)
-        ]
-
         self.configure_board()
 
         canvas_size = self.line_size + 2 * self.offset
@@ -39,19 +36,25 @@ class Board(Canvas):
         )
 
     def configure_board(self):
+        """A few configurations for the board, cleans up the __init__"""
+        self._board_map = [
+            [None for _ in range(self.board_size)] for _ in range(self.board_size)
+        ]
         # 504 is divisible by 18, 12 and 8 - this allows for board sizes of 19, 13 and 9
         # because there are board_size - 1 squares, and board_size lines
         # offset is there because we want to detect clicks from a bit outside last line
-        self._line_size = 504
         self._square_size = self.line_size // (self.board_size - 1)
         self._offset = self.square_size
 
     def place_stone(self, event_w):
+        """Handle stone placement, translates x and y to col and row if necessary"""
         if event_w.row is None:
             translator = Translate(self, event_w.event.x, event_w.event.y)
             success = translator.get_col_and_row()
             if success:
                 event_w.col, event_w.row = success
+            else:
+                return False
 
         stone_color = self.master.play_mode.color
 
@@ -64,8 +67,10 @@ class Board(Canvas):
         return True
 
     def remove_stone(self, event_w):
+        """Handle stone removal, adjust color if necessary"""
         if not (hasattr(event_w, "row") and hasattr(event_w, "col")):
             logging.error("???")
+            return False
 
         stone_color = self.board_map[event_w.row - 1][event_w.col - 1].color
 

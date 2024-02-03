@@ -14,14 +14,14 @@ class UICommand(ABC):
 
 
 class BlackCommand(UICommand):
-    """Side-menu command for switching stone placement colorer to mode black"""
+    """Side-menu button command for switching stone placement colorer to mode black"""
 
     def execute(self):
         self._app.play_mode.black_only()
 
 
 class WhiteCommand(UICommand):
-    """Side-menu command for switching stone placement colorer to mode white"""
+    """Side-menu button command for switching stone placement colorer to mode white"""
 
     def execute(self):
         self._app.play_mode.white_only()
@@ -35,7 +35,7 @@ class AlternateCommand(UICommand):
 
 
 class ResetCommand(UICommand):
-    """Clean up the board(, and command history)"""
+    """Side-menu button command for resetting the game"""
 
     # TODO auto save the board, for restoring
 
