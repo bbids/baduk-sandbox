@@ -19,9 +19,7 @@ class App(tk.Tk):
         self.rowconfigure(0, weight=1)
 
         # Sound management
-        tkSnack.initializeSnack(self)
-        self._placement_sound = tkSnack.Sound()
-        self.placement_sound.read("assets/stone_placement.wav")
+        self.sound_on()
 
         # UI components
         self._board = Board(self, 19)
@@ -35,33 +33,41 @@ class App(tk.Tk):
         if self.history.size() <= 0:
             logging.error("NO HISTORY")
             return None
-        
+
         cmnd = self.history.pop()
         cmnd.undo()
 
         if isinstance(cmnd, PlaceStone):
             self.play_mode.toggle_color
 
+    def sound_on(self):
+        tkSnack.initializeSnack(self)
+        self._placement_sound = tkSnack.Sound()
+        self.placement_sound.read("assets/stone_placement.wav")
+
+    def sound_off(self):
+        self.placement_sound.flush()
+
+
     @property
     def history(self):
         return self._history
-    
+
     @property
     def play_mode(self):
         return self._play_mode
-    
+
     @property
     def board(self):
         return self._board
-    
+
     @property
     def side_menu(self):
         return self._side_menu
-    
+
     @property
     def placement_sound(self):
         return self._placement_sound
-        
 
 
 def start_app() -> App:

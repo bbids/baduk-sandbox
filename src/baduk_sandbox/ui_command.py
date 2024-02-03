@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from .loader import Loader
 
 
 class UICommand(ABC):
@@ -42,3 +43,17 @@ class ResetCommand(UICommand):
         self._app.board.clear()
         self._app.history.reset()
         self._app.play_mode.game_start()
+
+
+class LoadCommand(UICommand):
+    """Load the sgf file command"""
+    
+    def __init__(self, app, file_path):
+        super().__init__(app)
+        self._file_path = file_path
+
+    def execute(self):
+        game = Loader(self._app, self._file_path)
+        game.read_moves()
+        ResetCommand(self._app).execute()
+        game.play()

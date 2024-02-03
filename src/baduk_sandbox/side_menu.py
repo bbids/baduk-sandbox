@@ -2,12 +2,12 @@ import tkinter as tk
 from tkinter import ttk
 
 from .utility import save
-from .utility import load
 
 from .ui_command import BlackCommand
 from .ui_command import WhiteCommand
 from .ui_command import AlternateCommand
 from .ui_command import ResetCommand
+from .ui_command import LoadCommand
 
 
 class SideMenu(ttk.Frame):
@@ -21,7 +21,9 @@ class SideMenu(ttk.Frame):
 
         # active button should be highlighted
         active_style = ttk.Style()
-        active_style.configure("Active.TButton", borderwidth="2", font=("calibri", 10, "bold"))
+        active_style.configure(
+            "Active.TButton", borderwidth="2", font=("calibri", 10, "bold")
+        )
         self._active_button = None
 
         # stylize the default ttk Button
@@ -29,7 +31,9 @@ class SideMenu(ttk.Frame):
         default_style.configure("TButton", focuscolor="none")
 
         self.create_button("Save", save, column=0, row=0, sticky=tk.W)
-        self.create_button("Load", load, column=1, row=0, sticky=tk.E)
+        self.create_button(
+            "Load", LoadCommand(self.master, "game.sgf").execute, column=1, row=0, sticky=tk.E
+        )
 
         self.create_button(
             "Black",
@@ -50,15 +54,17 @@ class SideMenu(ttk.Frame):
             AlternateCommand(self.master).execute,
             column=2,
             row=1,
-            sticky=tk.E
+            sticky=tk.E,
         )
         self.set_active(self.alternate_btn)
 
-        self.create_button("Undo", self.master.undo_command, column=0, row=2, sticky=tk.W)
+        self.create_button(
+            "Undo", self.master.undo_command, column=0, row=2, sticky=tk.W
+        )
         self.create_button(
             "Reset", ResetCommand(self.master).execute, column=1, row=2, sticky=tk.E
         )
-    
+
     def set_active(self, button):
         if self._active_button is not None:
             self._active_button["style"] = "TButton"
@@ -75,7 +81,7 @@ class SideMenu(ttk.Frame):
         button.grid(column=column, row=row, sticky=sticky, padx=(10, 10), pady=50)
 
         return button
-    
+
     @property
     def alternate_btn(self):
         return self._alternate_btn

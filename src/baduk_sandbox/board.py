@@ -5,6 +5,7 @@ from .stone import Stone
 from .board_GUI import BoardGUI
 from .action_command import PlaceStone
 from .board_click import Translate
+from .event import EventWrapper
 
 
 class Board(Canvas):
@@ -31,7 +32,7 @@ class Board(Canvas):
         self._gui = BoardGUI(self, background)
 
         # handle stone placement
-        self.bind("<1>", lambda event: PlaceStone(self.master, event).execute())
+        self.bind("<1>", lambda event: PlaceStone(self.master, EventWrapper(event)).execute())
 
     def configure_board(self):
         # 504 is divisible by 18, 12 and 8 - this allows for board sizes of 19, 13 and 9
@@ -78,7 +79,6 @@ class Board(Canvas):
                 if self.board_map[r][c] is not None:
                     self.board_map[r][c].destroy()
                     self.board_map[r][c] = None
-
     @property
     def board_size(self):
         return self._board_size

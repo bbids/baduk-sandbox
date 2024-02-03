@@ -1,8 +1,5 @@
 from abc import ABC, abstractmethod
 
-from .event import EventWrapper
-
-
 class ActionCommand(ABC):
     """Command interface"""
 
@@ -17,9 +14,9 @@ class ActionCommand(ABC):
 class PlaceStone(ActionCommand):
     """Board command for placing the stone"""
 
-    def __init__(self, app, event):
+    def __init__(self, app, event_w):
         super().__init__(app)
-        self._event_w = EventWrapper(event)
+        self._event_w = event_w
 
     def undo(self):
         self._app.board.remove_stone(self._event_w)
