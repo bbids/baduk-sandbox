@@ -1,12 +1,15 @@
 import setuptools
 
 setuptools.setup(
-    name="baduk-sandbox",
+    name="go_sandbox",
     version="0.1.0",
-    packages=["src/baduk_sandbox"],
+    packages=["src/go_sandbox"],
     entry_points={
         "console_scripts": [
-            "baduk = src.baduk_sandbox:main"
+            "play_go = src.go_sandbox:main"
         ]
     },
+    install_requires=[
+        "tkSnack"
+    ]
 )

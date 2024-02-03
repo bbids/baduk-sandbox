@@ -1,4 +1,4 @@
 #!/usr/bin/bash
 
 pip install .
-baduk
+play_go

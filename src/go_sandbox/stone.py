@@ -34,7 +34,7 @@ class Stone(Canvas):
         self.bind("<3>", lambda event: self.remove(event))
 
     def show(self):
-        """Handle stone placement"""
+        """Loades the stone on the board in right aesthetics"""
 
         board = self.master
         x = board.offset + board.square_size * (self.col - 1)
