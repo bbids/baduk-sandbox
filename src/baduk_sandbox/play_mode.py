@@ -1,5 +1,6 @@
 import logging
 
+
 class PlayMode:
     """Represents the configuration options for the game"""
 
@@ -49,7 +50,7 @@ class PlayMode:
 
     @color.setter
     def color(self, value):
-        if value  in ("black", "white"):
+        if value in ("black", "white"):
             self._color = value
         else:
             logging.debug("play mode color not black/white")

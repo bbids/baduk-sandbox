@@ -14,7 +14,9 @@ class Board(Canvas):
     def __init__(self, master, board_size=19, background="#DBB072"):
         self.master = master
         self._board_size = board_size
-        self._board_map = [[None for _ in range(self.board_size)] for _ in range(self.board_size)]
+        self._board_map = [
+            [None for _ in range(self.board_size)] for _ in range(self.board_size)
+        ]
 
         self.configure_board()
 
@@ -32,7 +34,9 @@ class Board(Canvas):
         self._gui = BoardGUI(self, background)
 
         # handle stone placement
-        self.bind("<1>", lambda event: PlaceStone(self.master, EventWrapper(event)).execute())
+        self.bind(
+            "<1>", lambda event: PlaceStone(self.master, EventWrapper(event)).execute()
+        )
 
     def configure_board(self):
         # 504 is divisible by 18, 12 and 8 - this allows for board sizes of 19, 13 and 9
@@ -40,7 +44,7 @@ class Board(Canvas):
         # offset is there because we want to detect clicks from a bit outside last line
         self._line_size = 504
         self._square_size = self.line_size // (self.board_size - 1)
-        self._offset = self.square_size    
+        self._offset = self.square_size
 
     def place_stone(self, event_w):
         if event_w.row is None:
@@ -79,6 +83,7 @@ class Board(Canvas):
                 if self.board_map[r][c] is not None:
                     self.board_map[r][c].destroy()
                     self.board_map[r][c] = None
+
     @property
     def board_size(self):
         return self._board_size
@@ -90,7 +95,7 @@ class Board(Canvas):
     @property
     def square_size(self):
         return self._square_size
-    
+
     @property
     def line_size(self):
         return self._line_size
@@ -98,8 +103,7 @@ class Board(Canvas):
     @property
     def offset(self):
         return self._offset
-    
+
     @property
     def gui(self):
         return self._gui
-

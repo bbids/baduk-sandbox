@@ -47,7 +47,7 @@ class ResetCommand(UICommand):
 
 class LoadCommand(UICommand):
     """Load the sgf file command"""
-    
+
     def __init__(self, app, file_path):
         super().__init__(app)
         self._file_path = file_path

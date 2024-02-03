@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 class ActionCommand(ABC):
     """Command interface"""
 
@@ -41,5 +42,3 @@ class RemoveStone(ActionCommand):
         success = self._app.board.remove_stone(self._event_w)
         if success:
             self._app.history.push(self)
-        
-

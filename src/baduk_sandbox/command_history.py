@@ -9,16 +9,17 @@ class CommandHistory:
 
     def pop(self):
         return self.history.pop()
-    
+
     def size(self):
         return len(self.history)
-    
+
     def reset(self):
         self._history = []
-    
+
     @property
     def history(self):
         return self._history
+
 
 """
     history = []
@@ -38,6 +39,3 @@ class CommandHistory:
     def get_history_size():
         return len(CommandHistory.history)
 """
-
-
-    

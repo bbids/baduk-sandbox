@@ -1,7 +1,7 @@
 import logging
 
 
-class BoardGUI():
+class BoardGUI:
     """Represents the baduk game board gui."""
 
     def __init__(self, board, background="#DBB072"):
@@ -40,7 +40,12 @@ class BoardGUI():
         for i in range(0, board.line_size + 1, board.square_size):
             i += board.offset
             board.create_line(
-                board.offset, i, board.line_size + board.offset, i, fill="black", width=2
+                board.offset,
+                i,
+                board.line_size + board.offset,
+                i,
+                fill="black",
+                width=2,
             )
 
     @staticmethod
@@ -48,10 +53,14 @@ class BoardGUI():
         for i in range(0, board.line_size + 1, board.square_size):
             i += board.offset
             board.create_line(
-                i, board.offset, i, board.line_size + board.offset, fill="black", width=2
+                i,
+                board.offset,
+                i,
+                board.line_size + board.offset,
+                fill="black",
+                width=2,
             )
 
     @property
     def background(self):
         return self._background
-

@@ -48,7 +48,6 @@ class App(tk.Tk):
     def sound_off(self):
         self.placement_sound.flush()
 
-
     @property
     def history(self):
         return self._history
