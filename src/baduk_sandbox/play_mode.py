@@ -3,13 +3,17 @@ import logging
 class PlayMode:
     """Represents the configuration options for the game"""
 
-    def __init__(self, alternate=True, initial_color="black"):
+    def __init__(self, app, alternate=True, initial_color="black"):
         self.alternate = alternate
         self.color = initial_color
+        self._app = app
 
     def game_start(self):
         self.alternate = True
         self.color = "black"
+
+        alt_btn = self._app.side_menu.alternate_btn
+        self._app.side_menu.set_active(alt_btn)
 
     def black_only(self):
         self.alternate = False

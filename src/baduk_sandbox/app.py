@@ -27,7 +27,7 @@ class App(tk.Tk):
         self._board = Board(self)
         self._side_menu = SideMenu(self)
 
-        self._play_mode = PlayMode()
+        self._play_mode = PlayMode(self)
         self.play_mode.game_start()
         self._history = CommandHistory()
 

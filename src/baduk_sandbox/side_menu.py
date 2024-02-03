@@ -52,31 +52,29 @@ class SideMenu(ttk.Frame):
             row=1,
             sticky=tk.E
         )
-        self._alternate_btn["style"] = "Active.TButton"
-        self._active_button = self.alternate_btn
+        self.set_active(self.alternate_btn)
 
         self.create_button("Undo", self.master.undo_command, column=0, row=2, sticky=tk.W)
         self.create_button(
             "Reset", ResetCommand(self.master).execute, column=1, row=2, sticky=tk.E
         )
+    
+    def set_active(self, button):
+        if self._active_button is not None:
+            self._active_button["style"] = "TButton"
+        button["style"] = "Active.TButton"
+        self._active_button = button
 
     def create_button(self, text, command, column, row, sticky):
         def button_click_handler():
             if row == 1:
-                self._active_button["style"] = "TButton"
-                button["style"] = "Active.TButton"
-                self._active_button = button
-                
+                self.set_active(button)
             command()
 
         button = ttk.Button(self, text=text, command=button_click_handler)
         button.grid(column=column, row=row, sticky=sticky, padx=(10, 10), pady=50)
 
         return button
-    
-    @property
-    def active_button(self):
-        return self._active_button
     
     @property
     def alternate_btn(self):
