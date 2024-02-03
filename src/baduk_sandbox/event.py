@@ -5,3 +5,19 @@ class EventWrapper():
         self.event = event
         self.row = None
         self.col = None
+
+    @property
+    def row(self):
+        return self._row
+    
+    @row.setter
+    def row(self, value):
+        self._row = value
+    
+    @property
+    def col(self):
+        return self._col
+    
+    @col.setter
+    def col(self, value):
+        self._col = value

@@ -20,24 +20,47 @@ class App(tk.Tk):
 
         # Sound management
         tkSnack.initializeSnack(self)
-        self.placement_sound = tkSnack.Sound()
+        self._placement_sound = tkSnack.Sound()
         self.placement_sound.read("assets/stone_placement.wav")
 
         # UI components
-        self.board = Board(self)
-        self.side_menu = SideMenu(self)
+        self._board = Board(self)
+        self._side_menu = SideMenu(self)
 
-        self.play_mode = PlayMode()
+        self._play_mode = PlayMode()
         self.play_mode.game_start()
-        self.history = CommandHistory()
+        self._history = CommandHistory()
 
     def undo_command(self):
-        assert self.history.size() > 0
+        if self.history.size() <= 0:
+            logging.error("NO HISTORY")
+            return None
+        
         cmnd = self.history.pop()
         cmnd.undo()
 
         if isinstance(cmnd, PlaceStone):
             self.play_mode.toggle_color
+
+    @property
+    def history(self):
+        return self._history
+    
+    @property
+    def play_mode(self):
+        return self._play_mode
+    
+    @property
+    def board(self):
+        return self._board
+    
+    @property
+    def side_menu(self):
+        return self._side_menu
+    
+    @property
+    def placement_sound(self):
+        return self._placement_sound
         
 
 

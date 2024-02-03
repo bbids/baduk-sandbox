@@ -5,7 +5,7 @@ class UICommand(ABC):
     """Command interface"""
 
     def __init__(self, app):
-        self.app = app
+        self._app = app
 
     @abstractmethod
     def execute(self):
@@ -16,21 +16,21 @@ class BlackCommand(UICommand):
     """Side-menu command for switching stone placement colorer to mode black"""
 
     def execute(self):
-        self.app.play_mode.black_only()
+        self._app.play_mode.black_only()
 
 
 class WhiteCommand(UICommand):
     """Side-menu command for switching stone placement colorer to mode white"""
 
     def execute(self):
-        self.app.play_mode.white_only()
+        self._app.play_mode.white_only()
 
 
 class AlternateCommand(UICommand):
     """Side-menu button command for switching to alternate color mode for colorer"""
 
     def execute(self):
-        self.app.play_mode.alternate_stones()
+        self._app.play_mode.alternate_stones()
 
 
 class ResetCommand(UICommand):
@@ -39,6 +39,6 @@ class ResetCommand(UICommand):
     # TODO auto save the board, for restoring
 
     def execute(self):
-        self.app.board.clear()
-        self.app.history.reset()
-        self.app.play_mode.game_start()
+        self._app.board.clear()
+        self._app.history.reset()
+        self._app.play_mode.game_start()

@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-import logging
 
 from .event import EventWrapper
 
@@ -28,7 +27,6 @@ class PlaceStone(ActionCommand):
     def execute(self):
         success = self._app.board.place_stone(self._event_w)
         if success:
-            logging.debug(self._app.history)
             self._app.history.push(self)
 
 

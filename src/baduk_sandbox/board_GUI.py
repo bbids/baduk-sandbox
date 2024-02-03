@@ -5,7 +5,7 @@ class BoardGUI():
     """Represents the baduk game board gui."""
 
     def __init__(self, board, background="#DBB072"):
-        self.background = background
+        self._background = background
 
         board.grid(column=0, row=0, padx=50, pady=50)
         board.configure(background=self.background)
@@ -50,4 +50,8 @@ class BoardGUI():
             board.create_line(
                 i, board.offset, i, board.line_size + board.offset, fill="black", width=2
             )
+
+    @property
+    def background(self):
+        return self._background
 

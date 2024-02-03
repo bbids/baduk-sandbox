@@ -22,7 +22,7 @@ class SideMenu(ttk.Frame):
         # active button should be highlighted
         active_style = ttk.Style()
         active_style.configure("Active.TButton", borderwidth="2", font=("calibri", 10, "bold"))
-        self.active_button = None
+        self._active_button = None
 
         # stylize the default ttk Button
         default_style = ttk.Style()
@@ -45,15 +45,15 @@ class SideMenu(ttk.Frame):
             row=1,
             sticky=None,
         )
-        self.alternate_btn = self.create_button(
+        self._alternate_btn = self.create_button(
             "Alternate",
             AlternateCommand(self.master).execute,
             column=2,
             row=1,
             sticky=tk.E
         )
-        self.alternate_btn["style"] = "Active.TButton"
-        self.active_button = self.alternate_btn
+        self._alternate_btn["style"] = "Active.TButton"
+        self._active_button = self.alternate_btn
 
         self.create_button("Undo", self.master.undo_command, column=0, row=2, sticky=tk.W)
         self.create_button(
@@ -63,9 +63,9 @@ class SideMenu(ttk.Frame):
     def create_button(self, text, command, column, row, sticky):
         def button_click_handler():
             if row == 1:
-                self.active_button["style"] = "TButton"
+                self._active_button["style"] = "TButton"
                 button["style"] = "Active.TButton"
-                self.active_button = button
+                self._active_button = button
                 
             command()
 
@@ -73,3 +73,11 @@ class SideMenu(ttk.Frame):
         button.grid(column=column, row=row, sticky=sticky, padx=(10, 10), pady=50)
 
         return button
+    
+    @property
+    def active_button(self):
+        return self._active_button
+    
+    @property
+    def alternate_btn(self):
+        return self._alternate_btn

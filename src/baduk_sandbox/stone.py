@@ -3,7 +3,6 @@ from PIL import ImageTk
 from PIL import Image
 
 
-import logging
 from .action_command import RemoveStone
 from .event import EventWrapper
 
@@ -15,14 +14,13 @@ class Stone(Canvas):
 
     def __init__(self, master, col, row, color):
         self.master = master
-        self.color = color
-        self.col = col
-        self.row = row
-
+        self._color = color
+        self._col = col
+        self._row = row
 
         if color not in Stone.image_cache:
             Stone.image_cache[color] = self.load_stone_image(color)
-        self.tk_image = Stone.image_cache[color]
+        self._tk_image = Stone.image_cache[color]
 
         super().__init__(
             master,
@@ -45,17 +43,16 @@ class Stone(Canvas):
         self.place(x=x, y=y, anchor="center")
 
         # nw to adjust our image of the stone
-        self.create_image(0, 0, image=self.tk_image, anchor="nw")
+        self.create_image(0, 0, image=self._tk_image, anchor="nw")
 
         # hide the default white background, use board background
         self.configure(background=self.master.gui.background)
-
 
     def remove(self, event):
         event_w = EventWrapper(event)
         event_w.row = self.row
         event_w.col = self.col
-        
+
         app = self.master.master
         RemoveStone(app, event_w).execute()
 
@@ -79,3 +76,15 @@ class Stone(Canvas):
 
     def __repr__(self):
         return f"{self.color}"
+
+    @property
+    def row(self):
+        return self._row
+
+    @property
+    def col(self):
+        return self._col
+
+    @property
+    def color(self):
+        return self._color

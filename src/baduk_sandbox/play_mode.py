@@ -1,9 +1,9 @@
-
+import logging
 
 class PlayMode:
     """Represents the configuration options for the game"""
 
-    def __init__(self, alternate = True, initial_color = "black"):
+    def __init__(self, alternate=True, initial_color="black"):
         self.alternate = alternate
         self.color = initial_color
 
@@ -21,7 +21,6 @@ class PlayMode:
 
     def alternate_stones(self):
         self.alternate = True
-
 
     def toggle_color(self):
         """Switch color if alternate is true"""
@@ -43,11 +42,13 @@ class PlayMode:
     @property
     def color(self):
         return self._color
-    
+
     @color.setter
     def color(self, value):
-        assert value in  ("black", "white")
-        self._color = value
+        if value  in ("black", "white"):
+            self._color = value
+        else:
+            logging.debug("play mode color not black/white")
 
     @property
     def alternate(self):
@@ -55,5 +56,7 @@ class PlayMode:
 
     @alternate.setter
     def alternate(self, value):
-        assert isinstance(value, bool)
-        self._alternate = value
+        if isinstance(value, bool):
+            self._alternate = value
+        else:
+            logging.debug("play mode alternate not boolean value")
