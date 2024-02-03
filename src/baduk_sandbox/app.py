@@ -24,7 +24,7 @@ class App(tk.Tk):
         self.placement_sound.read("assets/stone_placement.wav")
 
         # UI components
-        self._board = Board(self)
+        self._board = Board(self, 19)
         self._side_menu = SideMenu(self)
 
         self._play_mode = PlayMode(self)

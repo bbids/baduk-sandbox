@@ -61,9 +61,14 @@ class Board(Canvas):
     def remove_stone(self, event_w):
         if not (hasattr(event_w, "row") and hasattr(event_w, "col")):
             logging.error("???")
+
+        stone_color = self.board_map[event_w.row - 1][event_w.col - 1].color
+
         self.board_map[event_w.row - 1][event_w.col - 1].destroy()
         self.board_map[event_w.row - 1][event_w.col - 1] = None
-        self.master.play_mode.toggle_color()
+
+        if stone_color != self.master.play_mode.color:
+            self.master.play_mode.toggle_color()
         return True
 
     def clear(self):

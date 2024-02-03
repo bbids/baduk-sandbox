@@ -2,7 +2,6 @@ from tkinter import Canvas
 from PIL import ImageTk
 from PIL import Image
 
-
 from .action_command import RemoveStone
 from .event import EventWrapper
 
@@ -53,7 +52,7 @@ class Stone(Canvas):
         event_w.row = self.row
         event_w.col = self.col
 
-        app = self.master.master
+        app = self.winfo_toplevel()
         RemoveStone(app, event_w).execute()
 
     def load_stone_image(self, color):
