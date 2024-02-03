@@ -26,7 +26,7 @@ class PlaceStone(ActionCommand):
         self._app.board.remove_stone(self._event_w)
 
     def execute(self):
-        success = self._app.board.place_stone_x_y(self._event_w)
+        success = self._app.board.place_stone(self._event_w)
         if success:
             logging.debug(self._app.history)
             self._app.history.push(self)
@@ -40,7 +40,7 @@ class RemoveStone(ActionCommand):
         self._event_w = event_w
 
     def undo(self):
-        self._app.board.place_stone_row_col(self._event_w)
+        self._app.board.place_stone(self._event_w)
 
     def execute(self):
         success = self._app.board.remove_stone(self._event_w)
