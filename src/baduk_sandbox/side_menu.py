@@ -1,13 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
-
-from .utility import save
+import logging
 
 from .ui_command import BlackCommand
 from .ui_command import WhiteCommand
 from .ui_command import AlternateCommand
 from .ui_command import ResetCommand
-from .ui_command import LoadCommand
+# from .ui_command import LoadCommand
 
 
 class SideMenu(ttk.Frame):
@@ -16,7 +15,7 @@ class SideMenu(ttk.Frame):
     def __init__(self, master):
         self.master = master
 
-        super().__init__(master, width=200, height=400, padding=(20, 100))
+        super().__init__(master, width=100, height=400)
         self.grid(column=1, row=0, sticky=(tk.W, tk.E))
 
         # active button should be highlighted
@@ -30,10 +29,16 @@ class SideMenu(ttk.Frame):
         default_style = ttk.Style()
         default_style.configure("TButton", focuscolor="none")
 
-        self.create_button("Save", save, column=0, row=0, sticky=tk.W)
-        self.create_button(
-            "Load", LoadCommand(self.master, "game.sgf").execute, column=1, row=0, sticky=tk.E
-        )
+        # self.create_button("Save", save, column=0, row=0, sticky=tk.W)
+        # self.create_button(
+        #     "Load", LoadCommand(self.master, "game.sgf").execute, column=1, row=0, sticky=tk.E
+        # )
+        self._selected_value = tk.StringVar()
+        self._dropdown = ttk.Combobox(self, textvariable=self._selected_value, state="readonly")
+        self._dropdown["values"] = ("19", "13", "9")
+        self._dropdown.set("Board size")     
+        self._dropdown.bind("<<ComboboxSelected>>", self.on_dropdown_change) 
+        self._dropdown.grid(column=1, row=0, sticky=tk.W, pady=50)
 
         self.create_button(
             "Black",
@@ -62,7 +67,7 @@ class SideMenu(ttk.Frame):
             "Undo", self.master.undo_command, column=0, row=2, sticky=tk.W
         )
         self.create_button(
-            "Reset", ResetCommand(self.master).execute, column=1, row=2, sticky=tk.E
+            "Reset", ResetCommand(self.master).execute, column=1, row=2, sticky=None
         )
 
     def set_active(self, button):
@@ -81,6 +86,14 @@ class SideMenu(ttk.Frame):
         button.grid(column=column, row=row, sticky=sticky, padx=(10, 10), pady=50)
 
         return button
+    
+    def on_dropdown_change(self, event):
+        self._dropdown.selection_clear()
+
+        selected = self._selected_value.get()
+        
+        logging.debug(event)
+        self.master.reset_board(int(selected))
 
     @property
     def alternate_btn(self):

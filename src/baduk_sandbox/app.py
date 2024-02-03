@@ -7,6 +7,7 @@ from .side_menu import SideMenu
 from .action_command import PlaceStone
 from .command_history import CommandHistory
 from .play_mode import PlayMode
+from .stone import Stone
 
 
 class App(tk.Tk):
@@ -17,12 +18,13 @@ class App(tk.Tk):
         self.title("Baduk-sandbox")
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
+        self.geometry("1100x720")
 
         # Sound management
         self.sound_on()
 
         # UI components
-        self._board = Board(self, 19)
+        self._board = Board(self)
         self._side_menu = SideMenu(self)
 
         self._play_mode = PlayMode(self)
@@ -47,6 +49,13 @@ class App(tk.Tk):
 
     def sound_off(self):
         self.placement_sound.flush()
+
+    def reset_board(self, new_size):
+        Stone.image_cache = {}
+        self.board.destroy()
+        self.history.reset()
+        self._board = Board(self, new_size)
+        self.play_mode.game_start()
 
     @property
     def history(self):
