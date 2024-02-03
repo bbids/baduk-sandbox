@@ -34,10 +34,10 @@ class App(tk.Tk):
     def undo_command(self):
         assert self.history.size() > 0
         cmnd = self.history.pop()
+        cmnd.undo()
 
         if isinstance(cmnd, PlaceStone):
             self.play_mode.toggle_color
-            cmnd.undo()
         
 
 

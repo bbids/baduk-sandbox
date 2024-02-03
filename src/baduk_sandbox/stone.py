@@ -4,6 +4,8 @@ from PIL import Image
 
 
 import logging
+from .action_command import RemoveStone
+from .event import EventWrapper
 
 
 class Stone(Canvas):
@@ -27,13 +29,39 @@ class Stone(Canvas):
             highlightthickness=0,
         )
 
-        # place and show image
-        new_x, new_y, self.row, self.col = self.get_placement(event_w.event.x, event_w.event.y)
-        self.place(x=new_x, y=new_y, anchor="center")
+        # we want to place on x and y based on mouse click
+        if event_w.row is None and event_w.col is None:
+            new_x, new_y = self.compute_x_and_y(event_w.event.x, event_w.event.y)
+            self.row, self.col = self.compute_col_and_row(new_x, new_y)
+            self.place(x=new_x, y=new_y, anchor="center")
+        else:
+            # we want to place based on some row and col
+            self.row = event_w.row
+            self.col = event_w.col
+
+            board = self.master
+            # offset is the distance from board edge to outermost gameboard line
+            # rows and cols go from 1 onwards
+            x = board.offset + board.square_size * (self.row - 1)
+            y = board.offset + board.square_size * (self.col - 1)
+            logging.debug(f"NEW WAY, X: {x}, Y: {y}")
+            self.place(x=x, y=y, anchor="center")
+
         self.create_image(0, 0, image=self.tk_image, anchor="nw")
 
         # hide the default white background
         self.configure(background=master.gui.background)
+
+        # remove stone 
+        self.bind("<3>", lambda event: self.remove(event))
+
+    def remove(self, event):
+        event_w = EventWrapper(event)
+        event_w.row = self.row
+        event_w.col = self.col
+        
+        app = self.master.master
+        RemoveStone(app, event_w).execute()
 
     def compute_x_and_y(self, x, y):
         """Based on received x and y relative to board canvas x and y,
@@ -50,18 +78,6 @@ class Stone(Canvas):
     def compute_col_and_row(self, x, y):
         board = self.master
         return x // board.square_size, y // board.square_size
-
-    def get_placement(self, x, y):
-        """Handle stone placement based on event x and y relative to board canvas
-
-        Returns: x, y, row, col
-        """
-        new_x, new_y = self.compute_x_and_y(x, y)
-
-        row, col = self.compute_col_and_row(new_x, new_y)
-
-        logging.debug(f"Row: {row} Col: {col}")
-        return (new_x, new_y, row, col)
 
     def load_stone_image(self, color):
         match color:

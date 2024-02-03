@@ -49,8 +49,20 @@ class Board(Canvas):
         y_cond = (off - se / 2) < y < (self.line_size + off + se / 2)
 
         return x_cond and y_cond
+    
+    def place_stone_row_col(self, event_w):
+        """Place a stone if you want specific row and column"""
+        # if is valid bla bla
+        stone_color = self.master.play_mode.color
 
-    def place_stone(self, event_w):
+        stone = Stone(self, event_w, stone_color)
+        self.map[event_w.row - 1][event_w.col - 1] = stone
+
+
+        self.master_sound.play()
+        self.master.play_mode.toggle_color()
+
+    def place_stone_x_y(self, event_w):
         """Handle the stone placement event. 
         
         Returns bool value depending if stone was successfuly placed
@@ -79,6 +91,7 @@ class Board(Canvas):
     def remove_stone(self, event_w):
         self.map[event_w.row - 1][event_w.col - 1].destroy()
         self.map[event_w.row - 1][event_w.col - 1] = None
+        self.master.play_mode.toggle_color()
         return True
 
 

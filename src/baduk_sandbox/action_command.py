@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import logging
 
 from .event import EventWrapper
 
@@ -25,26 +26,25 @@ class PlaceStone(ActionCommand):
         self._app.board.remove_stone(self._event_w)
 
     def execute(self):
-        success = self._app.board.place_stone(self._event_w)
+        success = self._app.board.place_stone_x_y(self._event_w)
         if success:
+            logging.debug(self._app.history)
             self._app.history.push(self)
 
-'''
+
 class RemoveStone(ActionCommand):
     """Remove the stones that have no liberties"""
 
-    def __init__(self, app, event):
+    def __init__(self, app, event_w):
         super().__init__(app)
-        self._event = event
+        self._event_w = event_w
 
     def undo(self):
-        # PlaceStone(self._app, self._event).execute()
+        self._app.board.place_stone_row_col(self._event_w)
 
     def execute(self):
-        print("X: ", self._event.x, "Y: ", self._event.y)
-        """
-        success = self._app.board.remove_stone(self._event.x, self._event.y)
+        success = self._app.board.remove_stone(self._event_w)
         if success:
             self._app.history.push(self)
-        """
-'''
+        
+
