@@ -1,8 +1,8 @@
 # go-sandbox
 
-In development.
+Status: Inactive
 
-# Features so far
+# Features
 
   Left mouse click: place stone
 
